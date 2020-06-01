@@ -56,7 +56,7 @@ public class FindClosestPlayer {
 			System.out.println("Your Player:");
 			System.out.println(year + " season");
 			System.out.println(chosen.toString());
-			System.out.println("Finding closest player in specified year range...");
+			System.out.println("Most similar player in specified year range:");
 			
 			
 			//definitely a more efficient way to do this, but this just gives comp and deviation initial values

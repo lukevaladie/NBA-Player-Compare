@@ -56,10 +56,12 @@ public class PlayerTable {
 			if(name.substring(name.length() - 1).equals("*")) {
 				name = name.substring(0, name.length() - 1);
 			}
-			playerString = playerString.substring(playerString.indexOf(name) + name.length() + 1);
+			//playerString = playerString.substring(playerString.indexOf(name) + name.length() + 1);
+			playerString = playerString.substring(playerString.indexOf("\\"));
 			
 			String position = playerString.substring(playerString.indexOf(",") + 1, playerString.indexOf(",", playerString.indexOf(",") + 1));
 			playerString = playerString.substring(playerString.indexOf(position) + position.length() + 1);
+			//System.out.println(name + " - " + position);
 			
 			int age = Integer.parseInt(playerString.substring(0, 2));
 			playerString = playerString.substring(3);
@@ -239,21 +241,12 @@ public class PlayerTable {
 	
 	public static void main(String[] args) {
 		Path file = Paths.get("/Users/lukev/Documents/PlayerData/1982.txt");
-//		String s;
-//		try {
-//			s = Files.readString(file);
-//			System.out.println(s);
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 		
 		PlayerTable x = PlayerTable.populateTable(file, 2020);
 		Set<String> keys = x.getKeySet();
 		for(String s : keys) {
 			System.out.println(s);
 		}
-//		System.out.println(x.getPlayer("Magic Johnson - LAL").toString());
 		
 		
 		
