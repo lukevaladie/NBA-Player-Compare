@@ -65,6 +65,7 @@ public class FindClosestPlayer {
 			for(String k : firstYearKeys) {
 				firstYearKeysVector.add(k);
 			}
+			
 			Player comp = seasons.get(0).getPlayer(firstYearKeysVector.get(0));
 			double deviation = Player.getAvgDeviation(chosen, comp);
 			int compYear = firstYear;

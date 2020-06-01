@@ -280,39 +280,124 @@ public class Player {
 		return display;
 	}
 	
+	public static double calculatePercentDiff(double chosen, double comp) {
+		
+		if(chosen == 0.0 && comp == 0.0) {
+			return 0.0;
+		}else {
+			return Math.abs(chosen - comp)/((chosen + comp) / 2);
+		}
+		
+	}
+	
 	//the average deviation between the two players is returned (i.e. if there is an average of a 50% difference from comp to chosen, .5 is returned)
 	//it does not matter whether the deviation is positive or negative.
 	public static double getAvgDeviation (Player chosen, Player comp) {
 		
 		double total = 0;
-		total = total + (Math.abs(chosen.getGamesPlayed() - comp.getGamesPlayed()) / chosen.getGamesPlayed());
-		total = total + (Math.abs(chosen.getGamesStarted() - comp.getGamesStarted()) / chosen.getGamesStarted());
-		total = total + (Math.abs(chosen.getMinutesPerGame() - comp.getMinutesPerGame()) / chosen.getMinutesPerGame());
-		total = total + (Math.abs(chosen.getFieldGoalsPerGame() - comp.getFieldGoalsPerGame()) / chosen.getFieldGoalsPerGame());
-		total = total + (Math.abs(chosen.getFieldGoalAttemptsPerGame() - comp.getFieldGoalAttemptsPerGame()) / chosen.getFieldGoalAttemptsPerGame());
-		total = total + (Math.abs(chosen.getFieldGoalPercentage() - comp.getFieldGoalPercentage()) / chosen.getFieldGoalPercentage());
-		total = total + (Math.abs(chosen.getThreePointersPerGame() - comp.getThreePointersPerGame()) / chosen.getThreePointersPerGame());
-		total = total + (Math.abs(chosen.getThreePointAttemptsPerGame() - comp.getThreePointAttemptsPerGame()) / chosen.getThreePointAttemptsPerGame());
-		total = total + (Math.abs(chosen.getTwoPointersPerGame() - comp.getTwoPointersPerGame()) / chosen.getTwoPointersPerGame());
-		total = total + (Math.abs(chosen.getTwoPointAttemptsPerGame() - comp.getTwoPointAttemptsPerGame()) / chosen.getTwoPointAttemptsPerGame());
-		total = total + (Math.abs(chosen.getTwoPointPercentage() - comp.getTwoPointPercentage()) / chosen.getTwoPointPercentage());
-		total = total + (Math.abs(chosen.getEffectiveFieldGoalPercentage() - comp.getEffectiveFieldGoalPercentage()) / chosen.getEffectiveFieldGoalPercentage());
-		total = total + (Math.abs(chosen.getFreeThrowsPerGame() - comp.getFreeThrowsPerGame()) / chosen.getFreeThrowsPerGame());
-		total = total + (Math.abs(chosen.getFreeThrowAttemptsPerGame() - comp.getFreeThrowAttemptsPerGame()) / chosen.getFreeThrowAttemptsPerGame());
-		total = total + (Math.abs(chosen.getFreeThrowPercentage() - comp.getFreeThrowPercentage()) / chosen.getFreeThrowPercentage());
-		total = total + (Math.abs(chosen.getOffensiveReboundsPerGame() - comp.getOffensiveReboundsPerGame()) / chosen.getOffensiveReboundsPerGame());
-		total = total + (Math.abs(chosen.getDefensiveReboundsPerGame() - comp.getDefensiveReboundsPerGame()) / chosen.getDefensiveReboundsPerGame());
-		total = total + (Math.abs(chosen.getTotalReboundsPerGame() - comp.getTotalReboundsPerGame()) / chosen.getTotalReboundsPerGame());
-		total = total + (Math.abs(chosen.getAssistsPerGame() - comp.getAssistsPerGame()) / chosen.getAssistsPerGame());
-		total = total + (Math.abs(chosen.getStealsPerGame() - comp.getStealsPerGame()) / chosen.getStealsPerGame());
-		total = total + (Math.abs(chosen.getBlocksPerGame() - comp.getBlocksPerGame()) / chosen.getBlocksPerGame());
-		total = total + (Math.abs(chosen.getTurnoversPerGame() - comp.getTurnoversPerGame()) / chosen.getTurnoversPerGame());
-		total = total + (Math.abs(chosen.getPersonalFoulsPerGame() - comp.getPersonalFoulsPerGame()) / chosen.getPersonalFoulsPerGame());
-		total = total + (Math.abs(chosen.getPointsPerGame() - comp.getPointsPerGame()) / chosen.getPointsPerGame());
+		total += calculatePercentDiff(chosen.getGamesPlayed(), comp.getGamesPlayed());
+		total += calculatePercentDiff(chosen.getGamesStarted(), comp.getGamesStarted());
+		total += calculatePercentDiff(chosen.getMinutesPerGame(), comp.getMinutesPerGame());
+		total += calculatePercentDiff(chosen.getFieldGoalsPerGame(), comp.getFieldGoalsPerGame());
+		total += calculatePercentDiff(chosen.getFieldGoalAttemptsPerGame(), comp.getFieldGoalAttemptsPerGame());
+		total += calculatePercentDiff(chosen.getFieldGoalPercentage(), comp.getFieldGoalPercentage());
+		total += calculatePercentDiff(chosen.getThreePointersPerGame(), comp.getThreePointersPerGame());
+		total += calculatePercentDiff(chosen.getThreePointAttemptsPerGame(), comp.getThreePointAttemptsPerGame());
+		total += calculatePercentDiff(chosen.getThreePointPercentage(), comp.getThreePointPercentage());
+		total += calculatePercentDiff(chosen.getTwoPointersPerGame(), comp.getTwoPointersPerGame());
+		total += calculatePercentDiff(chosen.getTwoPointAttemptsPerGame(), comp.getTwoPointAttemptsPerGame());
+		total += calculatePercentDiff(chosen.getTwoPointPercentage(), comp.getTwoPointPercentage());
+		total += calculatePercentDiff(chosen.getEffectiveFieldGoalPercentage(), comp.getEffectiveFieldGoalPercentage());
+		total += calculatePercentDiff(chosen.getFreeThrowsPerGame(), comp.getFreeThrowsPerGame());
+		total += calculatePercentDiff(chosen.getFreeThrowAttemptsPerGame(), comp.getFreeThrowAttemptsPerGame());
+		total += calculatePercentDiff(chosen.getFreeThrowPercentage(), comp.getFreeThrowPercentage());
+		total += calculatePercentDiff(chosen.getOffensiveReboundsPerGame(), comp.getOffensiveReboundsPerGame());
+		total += calculatePercentDiff(chosen.getDefensiveReboundsPerGame(), comp.getDefensiveReboundsPerGame());
+		total += calculatePercentDiff(chosen.getTotalReboundsPerGame(), comp.getTotalReboundsPerGame());
+		total += calculatePercentDiff(chosen.getAssistsPerGame(), comp.getAssistsPerGame());
+		total += calculatePercentDiff(chosen.getStealsPerGame(), comp.getStealsPerGame());
+		total += calculatePercentDiff(chosen.getBlocksPerGame(), comp.getBlocksPerGame());
+		total += calculatePercentDiff(chosen.getTurnoversPerGame(), comp.getTurnoversPerGame());
+		total += calculatePercentDiff(chosen.getPersonalFoulsPerGame(), comp.getPersonalFoulsPerGame());
+		total += calculatePercentDiff(chosen.getPointsPerGame(), comp.getPointsPerGame());
 		
-		double average = total/24;
+		return total/24;
 		
-		return average;
+//		double total = 0;
+//		if(chosen.getGamesPlayed() != 0) {
+//		total = total + (Math.abs(chosen.getGamesPlayed() - comp.getGamesPlayed()) / chosen.getGamesPlayed());
+//		}else {
+//			total = total + 1;
+//		}
+//		if(chosen.getGamesStarted() != 0) {
+//		total = total + (Math.abs(chosen.getGamesStarted() - comp.getGamesStarted()) / chosen.getGamesStarted());
+//		}else {
+//			total = total + 1;
+//		}
+//		if(chosen.getMinutesPerGame() != 0.0) {
+//		total = total + (Math.abs(chosen.getMinutesPerGame() - comp.getMinutesPerGame()) / chosen.getMinutesPerGame());
+//		}else {
+//			total = total + 1;
+//		}
+//		if(chosen.getFieldGoalsPerGame() != 0.0) {
+//		total = total + (Math.abs(chosen.getFieldGoalsPerGame() - comp.getFieldGoalsPerGame()) / chosen.getFieldGoalsPerGame());
+//		}else {
+//			total = total + 1;
+//		}
+//		if(chosen.getFieldGoalAttemptsPerGame() != 0.0) {
+//		total = total + (Math.abs(chosen.getFieldGoalAttemptsPerGame() - comp.getFieldGoalAttemptsPerGame()) / chosen.getFieldGoalAttemptsPerGame());
+//		}else {
+//			total = total + 1;
+//		}
+//		if(chosen.getFieldGoalPercentage() != 0.0) {
+//		total = total + (Math.abs(chosen.getFieldGoalPercentage() - comp.getFieldGoalPercentage()) / chosen.getFieldGoalPercentage());
+//		}else {
+//			total = total + 1;
+//		}
+//		if(chosen.getThreePointersPerGame() != 0.0) {
+//		total = total + (Math.abs(chosen.getThreePointersPerGame() - comp.getThreePointersPerGame()) / chosen.getThreePointersPerGame());
+//		}else {
+//			total = total + 1;
+//		}
+//		if(chosen.getThreePointAttemptsPerGame() != 0.0) {
+//		total = total + (Math.abs(chosen.getThreePointAttemptsPerGame() - comp.getThreePointAttemptsPerGame()) / chosen.getThreePointAttemptsPerGame());
+//		}else {
+//			total = total + 1;
+//		}
+//		if(chosen.getThreePointPercentage() != 0.0) {
+//		total = total + (Math.abs(chosen.getThreePointPercentage() - comp.getThreePointPercentage()) / chosen.getThreePointPercentage());
+//		}else {
+//			total = total + 1;
+//		}
+//		if(chosen.getTwoPointersPerGame() != 0.0) {
+//		total = total + (Math.abs(chosen.getTwoPointersPerGame() - comp.getTwoPointersPerGame()) / chosen.getTwoPointersPerGame());
+//		}else {
+//			total = total + 1;
+//		}
+//		if(chosen.getTwoPointAttemptsPerGame() != 0.0) {
+//		total = total + (Math.abs(chosen.getTwoPointAttemptsPerGame() - comp.getTwoPointAttemptsPerGame()) / chosen.getTwoPointAttemptsPerGame());
+//		}else {
+//			total = total + 1;
+//		}
+//		if(chosen.getTwoPointPercentage() !=)
+//		total = total + (Math.abs(chosen.getTwoPointPercentage() - comp.getTwoPointPercentage()) / chosen.getTwoPointPercentage());
+//		total = total + (Math.abs(chosen.getEffectiveFieldGoalPercentage() - comp.getEffectiveFieldGoalPercentage()) / chosen.getEffectiveFieldGoalPercentage());
+//		total = total + (Math.abs(chosen.getFreeThrowsPerGame() - comp.getFreeThrowsPerGame()) / chosen.getFreeThrowsPerGame());
+//		total = total + (Math.abs(chosen.getFreeThrowAttemptsPerGame() - comp.getFreeThrowAttemptsPerGame()) / chosen.getFreeThrowAttemptsPerGame());
+//		total = total + (Math.abs(chosen.getFreeThrowPercentage() - comp.getFreeThrowPercentage()) / chosen.getFreeThrowPercentage());
+//		total = total + (Math.abs(chosen.getOffensiveReboundsPerGame() - comp.getOffensiveReboundsPerGame()) / chosen.getOffensiveReboundsPerGame());
+//		total = total + (Math.abs(chosen.getDefensiveReboundsPerGame() - comp.getDefensiveReboundsPerGame()) / chosen.getDefensiveReboundsPerGame());
+//		total = total + (Math.abs(chosen.getTotalReboundsPerGame() - comp.getTotalReboundsPerGame()) / chosen.getTotalReboundsPerGame());
+//		total = total + (Math.abs(chosen.getAssistsPerGame() - comp.getAssistsPerGame()) / chosen.getAssistsPerGame());
+//		total = total + (Math.abs(chosen.getStealsPerGame() - comp.getStealsPerGame()) / chosen.getStealsPerGame());
+//		total = total + (Math.abs(chosen.getBlocksPerGame() - comp.getBlocksPerGame()) / chosen.getBlocksPerGame());
+//		total = total + (Math.abs(chosen.getTurnoversPerGame() - comp.getTurnoversPerGame()) / chosen.getTurnoversPerGame());
+//		total = total + (Math.abs(chosen.getPersonalFoulsPerGame() - comp.getPersonalFoulsPerGame()) / chosen.getPersonalFoulsPerGame());
+//		total = total + (Math.abs(chosen.getPointsPerGame() - comp.getPointsPerGame()) / chosen.getPointsPerGame());
+//		
+//		double average = total/24;
+//		
+//		return average;
 	}
 	
 	
