@@ -6,6 +6,7 @@ import org.jsoup.nodes.*;
 import org.jsoup.select.*;
 import java.util.Scanner;
 import java.io.IOException;
+import java.nio.file.*;
 
 //This class is used to find the player most comparable to a given player in a single season
 
@@ -17,6 +18,10 @@ public class FindClosestPlayer {
 		//used to hold all the needed NBA seasons. Each PlayerTable contains the stats of every player that played
 		//during that season.
 		Vector<PlayerTable> seasons = new Vector<PlayerTable>();
+		
+//		System.out.println("Enter the directory where player data is stored (likely \"/Users/yourname/Documents/PlayerData/\")");
+//		
+//		Path folder = Paths.get(s.nextLine());
 		
 		System.out.println("Enter the first year you'd like to load (1980 - 2020):");
 		
@@ -30,7 +35,7 @@ public class FindClosestPlayer {
 		
 		for(int x = firstYear; x <= lastYear; x++) {
 			
-			PlayerTable pt = PlayerTable.populateTable("https://www.basketball-reference.com/leagues/NBA_" + x + "_per_game.html", x);
+			PlayerTable pt = PlayerTable.populateTable(Paths.get("/Users/lukev/Documents/PlayerData/" + x + ".txt"), x);
 			seasons.add(pt);
 		
 		}

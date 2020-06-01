@@ -4,8 +4,10 @@ import org.jsoup.*;
 import org.jsoup.nodes.*;
 import org.jsoup.select.*;
 import java.io.*;
+import java.nio.file.Files;
 import java.util.Set;
 import java.text.Normalizer;
+import java.nio.file.*;
 
 //class used to store a table of all players in a given season
 
@@ -39,86 +41,192 @@ public class PlayerTable {
 	
 
 	//this method is used to scrape the player list from BBRef
-	public static PlayerTable populateTable(String page, int season) {
+	public static PlayerTable populateTable(Path path, int season) {
 		PlayerTable pt = new PlayerTable(season);
 		try {
 			//extracts the table and puts it into a string
-			Document doc = Jsoup.connect(page).get();
-			Elements playerTableHTML = doc.getElementsByClass("full_table");
-			String playersHTML = playerTableHTML.toString();
 			
+			String playerString = Files.readString(path);
 			
-			//for each player in the table, creates a Player object and adds to pt
-			while(playersHTML.contains("<tr class=\"full_table\">")) {
-				//extracts basic info
-				String name = playersHTML.substring(playersHTML.indexOf(".html\">") + 7, playersHTML.indexOf("<", playersHTML.indexOf(".html\">") + 7));
-				name = Normalizer.normalize(name, Normalizer.Form.NFD);
-				name = name.replaceAll("[^\\p{ASCII}]", "");
-				String pos = playersHTML.substring(playersHTML.indexOf("pos\">") + 5, playersHTML.indexOf("<", playersHTML.indexOf("pos\">") + 5));
-				int age = Integer.parseInt(playersHTML.substring(playersHTML.indexOf("age\">") + 5, playersHTML.indexOf("<", playersHTML.indexOf("age\">") + 5)));
-				String team = playersHTML.substring(playersHTML.indexOf("teams/") + 6, playersHTML.indexOf("/", playersHTML.indexOf("teams/") + 6));
-				
-				Player p = new Player(name, team, age, pos);
-				
-				
-				//the rest is used to extract the per game stats for each player
-				p.setGamesPlayed(Integer.parseInt(playersHTML.substring(playersHTML.indexOf("\"g\">") + 4, playersHTML.indexOf("<", playersHTML.indexOf("\"g\">") + 4))));
-				p.setGamesStarted(Integer.parseInt(playersHTML.substring(playersHTML.indexOf("\"gs\">") + 5, playersHTML.indexOf("<", playersHTML.indexOf("\"gs\">") + 5))));
-				p.setMinutesPerGame(Double.parseDouble(playersHTML.substring(playersHTML.indexOf("mp_per_g\">") + 10, playersHTML.indexOf("<", playersHTML.indexOf("mp_per_g\">") + 10 ))));
-				p.setFieldGoalsPerGame(Double.parseDouble(playersHTML.substring(playersHTML.indexOf("fg_per_g\">") + 10, playersHTML.indexOf("<", playersHTML.indexOf("fg_per_g\">") + 10))));
-				p.setFieldGoalAttemptsPerGame(Double.parseDouble(playersHTML.substring(playersHTML.indexOf("fga_per_g\">") + 11, playersHTML.indexOf("<", playersHTML.indexOf("fga_per_g\">") + 11))));
-				
-				//the percentage fields are sometimes empty, so this has to be checked
-				String fgpString = playersHTML.substring(playersHTML.indexOf("fg_pct\">") + 8, playersHTML.indexOf("<", playersHTML.indexOf("fg_pct\">") + 8));
-				if(!fgpString.equals("")) {
-					p.setFieldGoalPercentage(Double.parseDouble(fgpString));
-				}
-				
-				p.setThreePointersPerGame(Double.parseDouble(playersHTML.substring(playersHTML.indexOf("fg3_per_g\">") + 11, playersHTML.indexOf("<", playersHTML.indexOf("fg3_per_g\">") + 11))));
-				p.setThreePointAttemptsPerGame(Double.parseDouble(playersHTML.substring(playersHTML.indexOf("fg3a_per_g\">") + 12, playersHTML.indexOf("<", playersHTML.indexOf("fg3a_per_g\">") + 12))));
-				
-				String thppString = playersHTML.substring(playersHTML.indexOf("fg3_pct\">") + 9, playersHTML.indexOf("<", playersHTML.indexOf("fg3_pct\">") + 9));
-				if(!thppString.equals("")) {
-					p.setThreePointPercentage(Double.parseDouble(thppString));
-				}
-				
-				p.setTwoPointersPerGame(Double.parseDouble(playersHTML.substring(playersHTML.indexOf("fg2_per_g\">") + 11, playersHTML.indexOf("<", playersHTML.indexOf("fg2_per_g\">") + 11))));
-				p.setTwoPointAttemptsPerGame(Double.parseDouble(playersHTML.substring(playersHTML.indexOf("fg2a_per_g\">") + 12, playersHTML.indexOf("<", playersHTML.indexOf("fg2a_per_g\">") + 12))));
-				
-				String tppString = playersHTML.substring(playersHTML.indexOf("fg2_pct\">") + 9, playersHTML.indexOf("<", playersHTML.indexOf("fg2_pct\">") + 9));
-				if(!tppString.contentEquals("")) {
-					p.setTwoPointPercentage(Double.parseDouble(tppString));
-				}
-				
-				String efgpString = playersHTML.substring(playersHTML.indexOf("efg_pct\">") + 9, playersHTML.indexOf("<", playersHTML.indexOf("efg_pct\">") + 9));
-				if(!efgpString.equals("")) {
-					p.setEffectiveFieldGoalPercentage(Double.parseDouble(efgpString));
-				}
-				
-				
-				p.setFreeThrowsPerGame(Double.parseDouble(playersHTML.substring(playersHTML.indexOf("ft_per_g\">") + 10, playersHTML.indexOf("<", playersHTML.indexOf("ft_per_g\">") + 10))));
-				p.setFreeThrowAttemptsPerGame(Double.parseDouble(playersHTML.substring(playersHTML.indexOf("fta_per_g\">") + 11, playersHTML.indexOf("<", playersHTML.indexOf("fta_per_g\">") + 11))));
-				
-				String ftpString = playersHTML.substring(playersHTML.indexOf("ft_pct\">") + 8, playersHTML.indexOf("<", playersHTML.indexOf("ft_pct\">") + 8));
-				if(!ftpString.equals("")) {
-					p.setFreeThrowPercentage(Double.parseDouble(ftpString));
-				}
-				
-				p.setOffensiveReboundsPerGame(Double.parseDouble(playersHTML.substring(playersHTML.indexOf("orb_per_g\">") + 11, playersHTML.indexOf("<", playersHTML.indexOf("orb_per_g\">") + 11))));
-				p.setDefensiveReboundsPerGame(Double.parseDouble(playersHTML.substring(playersHTML.indexOf("drb_per_g\">") + 11, playersHTML.indexOf("<", playersHTML.indexOf("drb_per_g\">") + 11))));
-				p.setTotalReboundsPerGame(Double.parseDouble(playersHTML.substring(playersHTML.indexOf("trb_per_g\">") + 11, playersHTML.indexOf("<", playersHTML.indexOf("trb_per_g\">") + 11))));
-				p.setAssistsPerGame(Double.parseDouble(playersHTML.substring(playersHTML.indexOf("ast_per_g\">") + 11, playersHTML.indexOf("<", playersHTML.indexOf("ast_per_g\">") + 11))));
-				p.setStealsPerGame(Double.parseDouble(playersHTML.substring(playersHTML.indexOf("stl_per_g\">") + 11, playersHTML.indexOf("<", playersHTML.indexOf("stl_per_g\">") + 11))));
-				p.setBlocksPerGame(Double.parseDouble(playersHTML.substring(playersHTML.indexOf("blk_per_g\">") + 11, playersHTML.indexOf("<", playersHTML.indexOf("blk_per_g\">") + 11))));
-				p.setTurnoversPerGame(Double.parseDouble(playersHTML.substring(playersHTML.indexOf("tov_per_g\">") + 11, playersHTML.indexOf("<", playersHTML.indexOf("tov_per_g\">") + 11))));
-				p.setPersonalFoulsPerGame(Double.parseDouble(playersHTML.substring(playersHTML.indexOf("pf_per_g\">") + 10, playersHTML.indexOf("<", playersHTML.indexOf("pf_per_g\">") + 10))));
-				p.setPointsPerGame(Double.parseDouble(playersHTML.substring(playersHTML.indexOf("pts_per_g\">") + 11, playersHTML.indexOf("<", playersHTML.indexOf("pts_per_g\">") + 11))));
-				
-				pt.addPlayer(p);
-				
-				playersHTML = playersHTML.substring(playersHTML.indexOf("</tr>", playersHTML.indexOf("<tr class=\"full_table\">")));
-				
+			while(playerString.contains(",")) {
+			
+			String name = playerString.substring(playerString.indexOf(",") + 1, playerString.indexOf("\\", playerString.indexOf(",") + 1));
+			name = Normalizer.normalize(name, Normalizer.Form.NFD);
+			name = name.replaceAll("[^\\p{ASCII}]", "");
+			if(name.substring(name.length() - 1).equals("*")) {
+				name = name.substring(0, name.length() - 1);
 			}
+			playerString = playerString.substring(playerString.indexOf(name) + name.length() + 1);
+			
+			String position = playerString.substring(playerString.indexOf(",") + 1, playerString.indexOf(",", playerString.indexOf(",") + 1));
+			playerString = playerString.substring(playerString.indexOf(position) + position.length() + 1);
+			
+			int age = Integer.parseInt(playerString.substring(0, 2));
+			playerString = playerString.substring(3);
+			
+			String team = playerString.substring(0, 3);
+			playerString = playerString.substring(4);
+			
+			Player p = new Player(name, team, age, position);
+			
+			if(!playerString.substring(0, 1).equals(",")) {
+				p.setGamesPlayed(Integer.parseInt(playerString.substring(0, playerString.indexOf(","))));
+			}
+			
+			playerString = playerString.substring(playerString.indexOf(",") + 1);
+			
+			if(!playerString.substring(0, 1).equals(",")) {
+				p.setGamesStarted(Integer.parseInt(playerString.substring(0, playerString.indexOf(","))));
+			}
+			
+			playerString = playerString.substring(playerString.indexOf(",") + 1);
+			
+			if(!playerString.substring(0, 1).equals(",")) {
+				p.setMinutesPerGame(Double.parseDouble(playerString.substring(0, playerString.indexOf(","))));
+			}
+			
+			playerString = playerString.substring(playerString.indexOf(",") + 1);
+			
+			if(!playerString.substring(0, 1).equals(",")) {
+				p.setFieldGoalsPerGame(Double.parseDouble(playerString.substring(0, playerString.indexOf(","))));
+			}
+			
+			playerString = playerString.substring(playerString.indexOf(",") + 1);
+			
+			if(!playerString.substring(0, 1).equals(",")) {
+				p.setFieldGoalAttemptsPerGame(Double.parseDouble(playerString.substring(0, playerString.indexOf(","))));
+			}
+			
+			playerString = playerString.substring(playerString.indexOf(",") + 1);
+			
+			if(!playerString.substring(0, 1).equals(",")) {
+				p.setFieldGoalPercentage(Double.parseDouble(playerString.substring(0, playerString.indexOf(","))));
+			}
+			
+			playerString = playerString.substring(playerString.indexOf(",") + 1);
+			
+			if(!playerString.substring(0, 1).equals(",")) {
+				p.setThreePointersPerGame(Double.parseDouble(playerString.substring(0, playerString.indexOf(","))));
+			}
+			
+			playerString = playerString.substring(playerString.indexOf(",") + 1);
+			
+			if(!playerString.substring(0, 1).equals(",")) {
+				p.setThreePointAttemptsPerGame(Double.parseDouble(playerString.substring(0, playerString.indexOf(","))));
+			}
+			
+			playerString = playerString.substring(playerString.indexOf(",") + 1);
+			
+			if(!playerString.substring(0, 1).equals(",")) {
+				p.setThreePointPercentage(Double.parseDouble(playerString.substring(0, playerString.indexOf(","))));
+			}
+			
+			playerString = playerString.substring(playerString.indexOf(",") + 1);
+			
+			if(!playerString.substring(0, 1).equals(",")) {
+				p.setTwoPointersPerGame(Double.parseDouble(playerString.substring(0, playerString.indexOf(","))));
+			}
+			
+			playerString = playerString.substring(playerString.indexOf(",") + 1);
+			
+			if(!playerString.substring(0, 1).equals(",")) {
+				p.setTwoPointAttemptsPerGame(Double.parseDouble(playerString.substring(0, playerString.indexOf(","))));
+			}
+			
+			playerString = playerString.substring(playerString.indexOf(",") + 1);
+			
+			if(!playerString.substring(0, 1).equals(",")) {
+				p.setTwoPointPercentage(Double.parseDouble(playerString.substring(0, playerString.indexOf(","))));
+			}
+			
+			playerString = playerString.substring(playerString.indexOf(",") + 1);
+			
+			if(!playerString.substring(0, 1).equals(",")) {
+				p.setEffectiveFieldGoalPercentage(Double.parseDouble(playerString.substring(0, playerString.indexOf(","))));
+			}
+			
+			playerString = playerString.substring(playerString.indexOf(",") + 1);
+			
+			if(!playerString.substring(0, 1).equals(",")) {
+				p.setFreeThrowsPerGame(Double.parseDouble(playerString.substring(0, playerString.indexOf(","))));
+			}
+			
+			playerString = playerString.substring(playerString.indexOf(",") + 1);
+			
+			if(!playerString.substring(0, 1).equals(",")) {
+				p.setFreeThrowAttemptsPerGame(Double.parseDouble(playerString.substring(0, playerString.indexOf(","))));
+			}
+			
+			playerString = playerString.substring(playerString.indexOf(",") + 1);
+			
+			if(!playerString.substring(0, 1).equals(",")) {
+				p.setFreeThrowPercentage(Double.parseDouble(playerString.substring(0, playerString.indexOf(","))));
+			}
+			
+			playerString = playerString.substring(playerString.indexOf(",") + 1);
+			
+			if(!playerString.substring(0, 1).equals(",")) {
+				p.setOffensiveReboundsPerGame(Double.parseDouble(playerString.substring(0, playerString.indexOf(","))));
+			}
+			
+			playerString = playerString.substring(playerString.indexOf(",") + 1);
+			
+			if(!playerString.substring(0, 1).equals(",")) {
+				p.setDefensiveReboundsPerGame(Double.parseDouble(playerString.substring(0, playerString.indexOf(","))));
+			}
+			
+			playerString = playerString.substring(playerString.indexOf(",") + 1);
+			
+			if(!playerString.substring(0, 1).equals(",")) {
+				p.setTotalReboundsPerGame(Double.parseDouble(playerString.substring(0, playerString.indexOf(","))));
+			}
+			
+			playerString = playerString.substring(playerString.indexOf(",") + 1);
+			
+			if(!playerString.substring(0, 1).equals(",")) {
+				p.setAssistsPerGame(Double.parseDouble(playerString.substring(0, playerString.indexOf(","))));
+			}
+			
+			playerString = playerString.substring(playerString.indexOf(",") + 1);
+			
+			if(!playerString.substring(0, 1).equals(",")) {
+				p.setStealsPerGame(Double.parseDouble(playerString.substring(0, playerString.indexOf(","))));
+			}
+			
+			playerString = playerString.substring(playerString.indexOf(",") + 1);
+			
+			if(!playerString.substring(0, 1).equals(",")) {
+				p.setBlocksPerGame(Double.parseDouble(playerString.substring(0, playerString.indexOf(","))));
+			}
+			
+			playerString = playerString.substring(playerString.indexOf(",") + 1);
+			
+			if(!playerString.substring(0, 1).equals(",")) {
+				p.setTurnoversPerGame(Double.parseDouble(playerString.substring(0, playerString.indexOf(","))));
+			}
+			
+			playerString = playerString.substring(playerString.indexOf(",") + 1);
+			
+			if(!playerString.substring(0, 1).equals(",")) {
+				p.setPersonalFoulsPerGame(Double.parseDouble(playerString.substring(0, playerString.indexOf(","))));
+			}
+			
+			playerString = playerString.substring(playerString.indexOf(",") + 1);
+			
+			if(!playerString.substring(0, 1).equals(",")) {
+				p.setPointsPerGame(Double.parseDouble(playerString.substring(0, playerString.indexOf(".") + 2)));
+			}
+			
+			playerString = playerString.substring(playerString.indexOf("."));
+			
+			pt.addPlayer(p);
+			
+			
+			}
+			
+			
+				
+			
 			
 			}catch(IOException i) {
 				System.out.println("There's an IOException!");
@@ -130,15 +238,25 @@ public class PlayerTable {
 	
 	
 	public static void main(String[] args) {
-		PlayerTable t = populateTable("https://www.basketball-reference.com/leagues/NBA_2020_per_game.html", 2020);
-		Set<String> keySet = t.getKeySet();
-		System.out.println(keySet.size());
-		for(String s : keySet) {
+		Path file = Paths.get("/Users/lukev/Documents/PlayerData/1982.txt");
+//		String s;
+//		try {
+//			s = Files.readString(file);
+//			System.out.println(s);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		
+		PlayerTable x = PlayerTable.populateTable(file, 2020);
+		Set<String> keys = x.getKeySet();
+		for(String s : keys) {
 			System.out.println(s);
-			Player p = t.getPlayer(s);
-			System.out.print(p.getName() + " - ");
-			System.out.println(p.getThreePointPercentage());
 		}
+//		System.out.println(x.getPlayer("Magic Johnson - LAL").toString());
+		
+		
+		
 	}
 	
 	
