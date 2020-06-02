@@ -1,8 +1,5 @@
 
 import java.util.Hashtable;
-import org.jsoup.*;
-import org.jsoup.nodes.*;
-import org.jsoup.select.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.Set;
@@ -37,6 +34,10 @@ public class PlayerTable {
 	public Set<String> getKeySet(){
 		Set<String> s = table.keySet();
 		return s;
+	}
+	
+	public boolean containsKey(String key) {
+		return getKeySet().contains(key);
 	}
 	
 

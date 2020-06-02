@@ -41,6 +41,14 @@ public class Player {
 		pos = position;
 	}
 	
+	//Empty constructor for initializing a placeholder player
+	public Player() {
+		name = "placeholder";
+		team = "placeholder";
+		age = 20;
+		pos = "placeholder";
+	}
+	
 	//methods for getting basic player info
 	
 	public String getName() {
