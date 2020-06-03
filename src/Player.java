@@ -1,12 +1,12 @@
 public class Player {
-	
-	//basic attributes of player. Cannot be changed.
+
+	// basic attributes of player. Cannot be changed.
 	private final String name;
 	private final String team;
 	private final int age;
 	private final String pos;
-	
-	//player performance statistics
+
+	// player performance statistics
 	private int gamesPlayed = 0;
 	private int gamesStarted = 0;
 	private double minutesPerGame = 0.0;
@@ -32,276 +32,282 @@ public class Player {
 	private double turnoversPerGame = 0.0;
 	private double personalFoulsPerGame = 0.0;
 	private double pointsPerGame;
-	
-	//creates Player object with given name, team, age, and position
+
+	// creates Player object with given name, team, age, and position
 	public Player(String playerName, String teamAbv, int age, String position) {
 		name = playerName;
 		team = teamAbv;
 		this.age = age;
 		pos = position;
 	}
-	
-	//Empty constructor for initializing a placeholder player
+
+	// constructor for initializing a placeholder player
 	public Player() {
 		name = "placeholder";
 		team = "placeholder";
 		age = 20;
 		pos = "placeholder";
 	}
-	
-	//methods for getting basic player info
-	
+
+	// methods for getting basic player info
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public String getTeam() {
-		return team;	
+		return team;
 	}
-	
+
 	public int getAge() {
 		return age;
 	}
-	
+
 	public String getPosition() {
 		return pos;
 	}
-	
-	//methods for setting player statistics
-	
+
+	// methods for setting player statistics
+
 	public void setGamesPlayed(int games) {
 		gamesPlayed = games;
 	}
-	
+
 	public void setGamesStarted(int games) {
 		gamesStarted = games;
 	}
-	
+
 	public void setMinutesPerGame(double minutes) {
 		minutesPerGame = minutes;
 	}
-	
-	
-	public void setFieldGoalsPerGame (double fieldGoals) {
+
+	public void setFieldGoalsPerGame(double fieldGoals) {
 		fieldGoalsPerGame = fieldGoals;
 	}
-	
+
 	public void setFieldGoalAttemptsPerGame(double fga) {
 		fieldGoalAttemptsPerGame = fga;
 	}
-	
+
 	public void setFieldGoalPercentage(double fgp) {
 		fieldGoalPercentage = fgp;
 	}
-	
-	public void setThreePointersPerGame (double tpg) {
+
+	public void setThreePointersPerGame(double tpg) {
 		threePointersPerGame = tpg;
 	}
-	
-	public void setThreePointAttemptsPerGame (double tpapg) {
+
+	public void setThreePointAttemptsPerGame(double tpapg) {
 		threePointAttemptsPerGame = tpapg;
 	}
-	
-	public void setThreePointPercentage (double tpp) {
+
+	public void setThreePointPercentage(double tpp) {
 		threePointPercentage = tpp;
 	}
-	
+
 	public void setTwoPointersPerGame(double tppg) {
 		twoPointersPerGame = tppg;
 	}
-	
+
 	public void setTwoPointAttemptsPerGame(double tpapg) {
 		twoPointAttemptsPerGame = tpapg;
 	}
-	
+
 	public void setTwoPointPercentage(double tpp) {
 		twoPointPercentage = tpp;
 	}
-	
+
 	public void setEffectiveFieldGoalPercentage(double efgp) {
 		effectiveFieldGoalPercentage = efgp;
 	}
-	
+
 	public void setFreeThrowsPerGame(double ftpg) {
 		freeThrowsPerGame = ftpg;
 	}
-	
+
 	public void setFreeThrowAttemptsPerGame(double ftapg) {
 		freeThrowAttemptsPerGame = ftapg;
 	}
-	
+
 	public void setFreeThrowPercentage(double ftp) {
 		freeThrowPercentage = ftp;
 	}
-	
+
 	public void setOffensiveReboundsPerGame(double orpg) {
 		offensiveReboundsPerGame = orpg;
 	}
-	
+
 	public void setDefensiveReboundsPerGame(double drpg) {
 		defensiveReboundsPerGame = drpg;
 	}
-	
+
 	public void setTotalReboundsPerGame(double trpg) {
 		totalReboundsPerGame = trpg;
 	}
-	
+
 	public void setAssistsPerGame(double apg) {
 		assistsPerGame = apg;
 	}
-	
+
 	public void setStealsPerGame(double spg) {
 		stealsPerGame = spg;
 	}
-	
+
 	public void setBlocksPerGame(double bpg) {
 		blocksPerGame = bpg;
 	}
-	
+
 	public void setTurnoversPerGame(double tovpg) {
 		turnoversPerGame = tovpg;
 	}
-	
+
 	public void setPersonalFoulsPerGame(double pfpg) {
 		personalFoulsPerGame = pfpg;
 	}
-	
+
 	public void setPointsPerGame(double ppg) {
 		pointsPerGame = ppg;
 	}
-	
-	//methods for retrieving player statistics
-	
+
+	// methods for retrieving player statistics
+
 	public int getGamesPlayed() {
 		return gamesPlayed;
 	}
-	
+
 	public int getGamesStarted() {
 		return gamesStarted;
 	}
-	
+
 	public double getMinutesPerGame() {
 		return minutesPerGame;
 	}
-	
-	
-	public double getFieldGoalsPerGame () {
+
+	public double getFieldGoalsPerGame() {
 		return fieldGoalsPerGame;
 	}
-	
+
 	public double getFieldGoalAttemptsPerGame() {
 		return fieldGoalAttemptsPerGame;
 	}
-	
+
 	public double getFieldGoalPercentage() {
 		return fieldGoalPercentage;
 	}
-	
-	public double getThreePointersPerGame () {
+
+	public double getThreePointersPerGame() {
 		return threePointersPerGame;
 	}
-	
-	public double getThreePointAttemptsPerGame () {
+
+	public double getThreePointAttemptsPerGame() {
 		return threePointAttemptsPerGame;
 	}
-	
-	public double getThreePointPercentage () {
+
+	public double getThreePointPercentage() {
 		return threePointPercentage;
 	}
-	
+
 	public double getTwoPointersPerGame() {
 		return twoPointersPerGame;
 	}
-	
+
 	public double getTwoPointAttemptsPerGame() {
 		return twoPointAttemptsPerGame;
 	}
-	
+
 	public double getTwoPointPercentage() {
 		return twoPointPercentage;
 	}
-	
+
 	public double getEffectiveFieldGoalPercentage() {
 		return effectiveFieldGoalPercentage;
 	}
-	
+
 	public double getFreeThrowsPerGame() {
 		return freeThrowsPerGame;
 	}
-	
+
 	public double getFreeThrowAttemptsPerGame() {
 		return freeThrowAttemptsPerGame;
 	}
-	
+
 	public double getFreeThrowPercentage() {
 		return freeThrowPercentage;
 	}
-	
+
 	public double getOffensiveReboundsPerGame() {
 		return offensiveReboundsPerGame;
 	}
-	
+
 	public double getDefensiveReboundsPerGame() {
 		return defensiveReboundsPerGame;
 	}
-	
+
 	public double getTotalReboundsPerGame() {
 		return totalReboundsPerGame;
 	}
-	
+
 	public double getAssistsPerGame() {
 		return assistsPerGame;
 	}
-	
+
 	public double getStealsPerGame() {
 		return stealsPerGame;
 	}
-	
+
 	public double getBlocksPerGame() {
 		return blocksPerGame;
 	}
-	
+
 	public double getTurnoversPerGame() {
 		return turnoversPerGame;
 	}
-	
+
 	public double getPersonalFoulsPerGame() {
 		return personalFoulsPerGame;
 	}
-	
+
 	public double getPointsPerGame() {
 		return pointsPerGame;
 	}
-	
+
 	public String toString() {
 		String display = name + " - " + team + " - " + age + " - " + pos + "\n";
 		display += "GP: " + getGamesPlayed() + ", GS: " + getGamesStarted() + ", MPG: " + getMinutesPerGame() + "\n";
-		display += "FG/G: " + getFieldGoalsPerGame() + ", FGA/G: " + getFieldGoalAttemptsPerGame() + ", FG%: " + getFieldGoalPercentage() + "\n";
-		display += "3P/G: " + getThreePointersPerGame() + ", 3PA/G: " + getThreePointAttemptsPerGame() + ", 3P%: " + getThreePointPercentage() + "\n";
-		display += "2P/G: " + getTwoPointersPerGame() + ", 2PA/G: " + getTwoPointAttemptsPerGame() + ", 2P%: " + getTwoPointPercentage() + "\n";
+		display += "FG/G: " + getFieldGoalsPerGame() + ", FGA/G: " + getFieldGoalAttemptsPerGame() + ", FG%: "
+				+ getFieldGoalPercentage() + "\n";
+		display += "3P/G: " + getThreePointersPerGame() + ", 3PA/G: " + getThreePointAttemptsPerGame() + ", 3P%: "
+				+ getThreePointPercentage() + "\n";
+		display += "2P/G: " + getTwoPointersPerGame() + ", 2PA/G: " + getTwoPointAttemptsPerGame() + ", 2P%: "
+				+ getTwoPointPercentage() + "\n";
 		display += "eFG%: " + getEffectiveFieldGoalPercentage() + "\n";
-		display += "FT/G: " + getFreeThrowsPerGame() + ", FTA/G: " + getFreeThrowAttemptsPerGame() + ", FT%: " + getFreeThrowPercentage() + "\n";
-		display += "ORB/G" + getOffensiveReboundsPerGame() + ", DRB/G: " + getDefensiveReboundsPerGame() + ", TRB/G: " + getTotalReboundsPerGame() + "\n";
-		display += "AST/G: " + getAssistsPerGame() + ", STL/G: " + getStealsPerGame() + ", BLK/G: " + getBlocksPerGame() + "\n";
+		display += "FT/G: " + getFreeThrowsPerGame() + ", FTA/G: " + getFreeThrowAttemptsPerGame() + ", FT%: "
+				+ getFreeThrowPercentage() + "\n";
+		display += "ORB/G" + getOffensiveReboundsPerGame() + ", DRB/G: " + getDefensiveReboundsPerGame() + ", TRB/G: "
+				+ getTotalReboundsPerGame() + "\n";
+		display += "AST/G: " + getAssistsPerGame() + ", STL/G: " + getStealsPerGame() + ", BLK/G: " + getBlocksPerGame()
+				+ "\n";
 		display += "TOV/G: " + getTurnoversPerGame() + ", PF/G" + getPersonalFoulsPerGame() + "\n";
 		display += "PTS/G: " + getPointsPerGame();
 		return display;
 	}
-	
-	public static double calculatePercentDiff(double chosen, double comp) {
-		
-		if(chosen == 0.0 && comp == 0.0) {
+
+	//calculates the percent difference between two doubles. Used to calculate the average deviation
+	private static double calculatePercentDiff(double chosen, double comp) {
+
+		if (chosen == 0.0 && comp == 0.0) {
 			return 0.0;
-		}else {
-			return Math.abs(chosen - comp)/((chosen + comp) / 2);
+		} else {
+			return Math.abs(chosen - comp) / ((chosen + comp) / 2);
 		}
-		
+
 	}
-	
-	//the average deviation between the two players is returned (i.e. if there is an average of a 50% difference from comp to chosen, .5 is returned)
-	//it does not matter whether the deviation is positive or negative.
-	public static double getAvgDeviation (Player chosen, Player comp) {
-		
+
+	// the average deviation between the two players is returned (i.e. if there is
+	// an average of a 50% difference from comp to chosen, .5 is returned)
+	// it does not matter whether the deviation is positive or negative.
+	public static double getAvgDeviation(Player chosen, Player comp) {
+
 		double total = 0;
 		total += calculatePercentDiff(chosen.getGamesPlayed(), comp.getGamesPlayed());
 		total += calculatePercentDiff(chosen.getGamesStarted(), comp.getGamesStarted());
@@ -328,13 +334,9 @@ public class Player {
 		total += calculatePercentDiff(chosen.getTurnoversPerGame(), comp.getTurnoversPerGame());
 		total += calculatePercentDiff(chosen.getPersonalFoulsPerGame(), comp.getPersonalFoulsPerGame());
 		total += calculatePercentDiff(chosen.getPointsPerGame(), comp.getPointsPerGame());
-		
-		return total/24;
-		
-	}
-	
-	
 
-	
+		return total / 24;
+
+	}
 
 }
