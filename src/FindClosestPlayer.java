@@ -33,6 +33,7 @@ public class FindClosestPlayer {
 
 		}
 
+
 		while (true) {
 
 			// will be used to hold the user's chosen player
@@ -71,7 +72,7 @@ public class FindClosestPlayer {
 			int firstYear = 0;
 			int lastYear = 0;
 
-			// loop until the user enters a valid year
+			//loop until the user enters a valid year
 			while (!validYearEntered) {
 
 				System.out.println(
@@ -114,8 +115,7 @@ public class FindClosestPlayer {
 			System.out.println(chosen.toString());
 			System.out.println("Most similar player in specified year range:");
 
-			// Gives comp and deviation initial values. By default, they are set to the
-			// first player in the first specified season.
+			//Gives comp and deviation initial values. By default, they are set to the first player in the first specified season.
 			Set<String> firstYearKeys = seasons.get(yearSpan - (LATEST_YEAR - firstYear)).getKeySet();
 			Vector<String> firstYearKeysVector = new Vector<String>();
 			for (String k : firstYearKeys) {
@@ -124,19 +124,19 @@ public class FindClosestPlayer {
 
 			Player comp = seasons.get(yearSpan - (LATEST_YEAR - firstYear)).getPlayer(firstYearKeysVector.get(0));
 			double deviation = Player.getAvgDeviation(chosen, comp);
-
-			// this will be used to display the season in which the comparable player played
+			
+			//this will be used to display the season in which the comparable player played
 			int compYear = firstYear;
 
-			// A vector that will only hold the user's specified seasons
+			//A vector that will only hold the user's specified seasons
 			Vector<PlayerTable> selectedSeasons = new Vector<PlayerTable>();
 
-			// populated selectedSeasons
+			//populated selectedSeasons
 			for (int x = firstYear; x <= lastYear; x++) {
 				selectedSeasons.add(seasons.get(yearSpan - (LATEST_YEAR - x)));
 			}
 
-			// finds the most comparable player within the specified date range
+			//finds the most comparable player within the specified date range
 			for (PlayerTable pt : selectedSeasons) {
 				Set<String> keys = pt.getKeySet();
 				for (String player : keys) {
