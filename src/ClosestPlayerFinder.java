@@ -1,29 +1,34 @@
 
 import java.util.Vector;
+
+import javax.swing.*;
+import java.awt.*;
+
 import java.util.Set;
 
 import java.util.Scanner;
-
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.nio.file.*;
 
 //This class is used to find the player most comparable to a given player in a single season
 
-public class FindClosestPlayer {
+public class ClosestPlayerFinder {
 
 	// These ints mark the bounds of the seasons loaded into the program
 	private static final int EARLIEST_YEAR = 1980;
 	private static final int LATEST_YEAR = 2020;
+	Vector<PlayerTable> seasons;
+	Scanner s;
 
-	public static void main(String[] args) {
-
-		Scanner s = new Scanner(System.in);
-
+	// on startup, load the player data into a vector of PlayerTables
+	public ClosestPlayerFinder() {
+		s = new Scanner(System.in);
 		// used to hold all the needed NBA seasons. Each PlayerTable contains the stats
 		// of every player that played
 		// during that season.
-		Vector<PlayerTable> seasons = new Vector<PlayerTable>();
-
-		System.out.println("Loading player stats...");
+		seasons = new Vector<PlayerTable>();
 
 		// Populate seasons with a PlayerTable for every season
 		for (int x = EARLIEST_YEAR; x <= LATEST_YEAR; x++) {
@@ -33,11 +38,78 @@ public class FindClosestPlayer {
 
 		}
 
+		JFrame frame = new JFrame();
+		frame.setTitle("NBA Player Comparison Engine");
+		frame.setSize(600, 500);
+		frame.setLayout(new BorderLayout());
+
+		JPanel northPanel = new JPanel();
+		northPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 45, 15));
+
+		JLabel nameLabel = new JLabel("Player: ");
+		JTextField playerInput = new JTextField(30);
+		JLabel teamLabel = new JLabel("Team Abbreviation: ");
+		JTextField teamInput = new JTextField(3);
+		JLabel seasonLabel = new JLabel("Season: ");
+		JTextField seasonInput = new JTextField(4);
+		JLabel firstSeasonLabel = new JLabel("First year of search range: ");
+		JTextField firstSeasonInput = new JTextField(4);
+		JLabel lastSeasonLabel = new JLabel("Last year of search range: ");
+		JTextField lastSeasonInput = new JTextField(4);
+
+		JButton findComp = new JButton("Find comparable player in search range");
+		findComp.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				// check inputs first
+				findComp(playerInput.getText(), teamInput.getText(), Integer.parseInt(seasonInput.getText()),
+						Integer.parseInt(firstSeasonInput.getText()), Integer.parseInt(lastSeasonInput.getText()));
+			}
+
+		});
+
+		northPanel.add(nameLabel);
+		northPanel.add(playerInput);
+		northPanel.add(teamLabel);
+		northPanel.add(teamInput);
+		northPanel.add(seasonLabel);
+		northPanel.add(seasonInput);
+		northPanel.add(firstSeasonLabel);
+		northPanel.add(firstSeasonInput);
+		northPanel.add(lastSeasonLabel);
+		northPanel.add(lastSeasonInput);
+		northPanel.add(findComp);
+
+		JPanel westPanel = new JPanel();
+		westPanel.setBorder(BorderFactory.createEmptyBorder(15, 5, 10, 5));
+		JTextArea chosenPlayerStats = new JTextArea(20, 28);
+		chosenPlayerStats.setEditable(false);
+		westPanel.add(chosenPlayerStats);
+
+		JPanel eastPanel = new JPanel();
+		eastPanel.setBorder(BorderFactory.createEmptyBorder(15, 5, 10, 5));
+		JTextArea compStats = new JTextArea(20, 28);
+		compStats.setEditable(false);
+		eastPanel.add(compStats);
+
+		frame.add(northPanel, BorderLayout.NORTH);
+		frame.add(westPanel, BorderLayout.WEST);
+		frame.add(eastPanel, BorderLayout.EAST);
+
+		frame.setVisible(true);
+	}
+
+	private void findComp(String name, String team, int season, int firstYear, int lastYear) {
+
+		// will be used to hold the user's chosen player
+		Player chosen = new Player();
+
+	}
+
+	public static void main(String[] args) {
 
 		while (true) {
 
-			// will be used to hold the user's chosen player
-			Player chosen = new Player();
 			// will hold a particular season for the selected player
 			int year = 0;
 
@@ -72,7 +144,7 @@ public class FindClosestPlayer {
 			int firstYear = 0;
 			int lastYear = 0;
 
-			//loop until the user enters a valid year
+			// loop until the user enters a valid year
 			while (!validYearEntered) {
 
 				System.out.println(
@@ -115,7 +187,8 @@ public class FindClosestPlayer {
 			System.out.println(chosen.toString());
 			System.out.println("Most similar player in specified year range:");
 
-			//Gives comp and deviation initial values. By default, they are set to the first player in the first specified season.
+			// Gives comp and deviation initial values. By default, they are set to the
+			// first player in the first specified season.
 			Set<String> firstYearKeys = seasons.get(yearSpan - (LATEST_YEAR - firstYear)).getKeySet();
 			Vector<String> firstYearKeysVector = new Vector<String>();
 			for (String k : firstYearKeys) {
@@ -124,19 +197,19 @@ public class FindClosestPlayer {
 
 			Player comp = seasons.get(yearSpan - (LATEST_YEAR - firstYear)).getPlayer(firstYearKeysVector.get(0));
 			double deviation = Player.getAvgDeviation(chosen, comp);
-			
-			//this will be used to display the season in which the comparable player played
+
+			// this will be used to display the season in which the comparable player played
 			int compYear = firstYear;
 
-			//A vector that will only hold the user's specified seasons
+			// A vector that will only hold the user's specified seasons
 			Vector<PlayerTable> selectedSeasons = new Vector<PlayerTable>();
 
-			//populated selectedSeasons
+			// populated selectedSeasons
 			for (int x = firstYear; x <= lastYear; x++) {
 				selectedSeasons.add(seasons.get(yearSpan - (LATEST_YEAR - x)));
 			}
 
-			//finds the most comparable player within the specified date range
+			// finds the most comparable player within the specified date range
 			for (PlayerTable pt : selectedSeasons) {
 				Set<String> keys = pt.getKeySet();
 				for (String player : keys) {
