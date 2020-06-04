@@ -42,12 +42,9 @@ public class PlayerTable {
 
 	// this method is used to scrape the player list from a document holding all
 	// per-game box stats for a given season
-	public static PlayerTable populateTable(Path path, int season) {
+	public static PlayerTable populateTable(String playerString, int season) {
 		PlayerTable pt = new PlayerTable(season);
-		try {
-
-			// extracts the table and puts it into a string
-			String playerString = Files.readString(path);
+		//try {
 
 			// all of this is extremely ugly string parsing in order to extract all the
 			// stats
@@ -237,9 +234,9 @@ public class PlayerTable {
 
 			}
 
-		} catch (IOException i) {
-			System.out.println("There's an IOException!");
-		}
+//		} catch (IOException i) {
+//			System.out.println("There's an IOException!");
+//		}
 
 		return pt;
 	}

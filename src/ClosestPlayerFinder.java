@@ -3,7 +3,6 @@ import java.util.Vector;
 
 import javax.swing.*;
 
-
 import java.util.Set;
 
 import java.util.Scanner;
@@ -13,6 +12,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.*;
 
 //This class is used to find the player most comparable to a given player in a single season
@@ -131,8 +134,12 @@ public class ClosestPlayerFinder {
 
 		// Populate seasons with a PlayerTable for every season
 		for (int x = EARLIEST_YEAR; x <= LATEST_YEAR; x++) {
+			
+			//These lines are used to get the data from the text files, which are contained in the classpath
+			InputStream in = getClass().getClassLoader().getResourceAsStream(x + ".txt");
+			String data = readTextFromInputStream(in);
 
-			PlayerTable pt = PlayerTable.populateTable(Paths.get("./PlayerData/" + x + ".txt"), x);
+			PlayerTable pt = PlayerTable.populateTable(data, x);
 			seasons.add(pt);
 
 		}
@@ -140,10 +147,29 @@ public class ClosestPlayerFinder {
 		findComp.setText("Find most comparable player in search range");
 		findComp.setEnabled(true);
 	}
-	
+
 	private void closeProgram() {
 		frame.dispose();
 		System.exit(0);
+	}
+
+	//method used to convert an input stream to a String so that data can be extracted
+	private String readTextFromInputStream(InputStream i) {
+		//will hold the text that is to be returned
+		String text = "";
+		//used to read in the file line by line
+		BufferedReader reader = new BufferedReader(new InputStreamReader(i));
+		String currentLine;
+		try {
+			//this awkward structure is necessary because the line isn't recoverable after nextLine() is called
+			while ((currentLine = reader.readLine()) != null) {
+				text = text + currentLine + "\n";
+			}
+			return text;
+		} catch (IOException e) {
+			System.out.println("IOException found!");
+			return null;
+		}
 	}
 
 	private void findComp(String name, String team, int season, int firstYear, int lastYear) {
@@ -216,8 +242,8 @@ public class ClosestPlayerFinder {
 		} else {
 			chosenPlayerStats.setText(
 					"Invalid input. Ensure that you have entered valid inputs in every field. \n A season is denoted by the second"
-					+ " year in which it took place. \n Ensure that you have entered seasons between 1980 and 2020 to be included in the"
-					+ " search, \n and that your chosen player, team, and season are correct.");
+							+ " year in which it took place. \n Ensure that you have entered seasons between 1980 and 2020 to be included in the"
+							+ " search, \n and that your chosen player, team, and season are correct.");
 		}
 
 	}
