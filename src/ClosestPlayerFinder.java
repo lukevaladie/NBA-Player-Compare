@@ -11,12 +11,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.file.*;
 
 //This class is used to find the player most comparable to a given player in a single season
 
@@ -31,6 +29,7 @@ public class ClosestPlayerFinder {
 	JTextArea chosenPlayerStats;
 	JTextArea compStats;
 	JFrame frame;
+	JTextArea deviationDisplay;
 
 	// on startup, load the player data into a vector of PlayerTables
 	public ClosestPlayerFinder() {
@@ -113,10 +112,17 @@ public class ClosestPlayerFinder {
 		compStats = new JTextArea(20, 28);
 		compStats.setEditable(false);
 		eastPanel.add(compStats);
+		
+		JPanel southPanel = new JPanel();
+		southPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		deviationDisplay = new JTextArea(1, 35);
+		deviationDisplay.setEditable(false);
+		southPanel.add(deviationDisplay);
 
 		frame.add(northPanel, BorderLayout.NORTH);
 		frame.add(westPanel, BorderLayout.WEST);
 		frame.add(eastPanel, BorderLayout.EAST);
+		frame.add(southPanel, BorderLayout.SOUTH);
 		
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
@@ -238,6 +244,7 @@ public class ClosestPlayerFinder {
 
 			chosenPlayerStats.setText("Your Player:\n" + season + " season\n" + chosen.toString());
 			compStats.setText("Most comparable player:\n" + compYear + " season\n" + comp.toString());
+			deviationDisplay.setText("Average statistical deviation: " + deviation);
 
 		} else {
 			chosenPlayerStats.setText(
