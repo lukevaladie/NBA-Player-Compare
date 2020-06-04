@@ -2,7 +2,7 @@
 import java.util.Vector;
 
 import javax.swing.*;
-import java.awt.*;
+
 
 import java.util.Set;
 
@@ -10,6 +10,9 @@ import java.util.Scanner;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.nio.file.*;
 
 //This class is used to find the player most comparable to a given player in a single season
@@ -22,24 +25,15 @@ public class ClosestPlayerFinder {
 	Vector<PlayerTable> seasons;
 	Scanner s;
 
+	JTextArea chosenPlayerStats;
+	JTextArea compStats;
+	JFrame frame;
+
 	// on startup, load the player data into a vector of PlayerTables
 	public ClosestPlayerFinder() {
-		s = new Scanner(System.in);
-		// used to hold all the needed NBA seasons. Each PlayerTable contains the stats
-		// of every player that played
-		// during that season.
-		seasons = new Vector<PlayerTable>();
 
-		// Populate seasons with a PlayerTable for every season
-		for (int x = EARLIEST_YEAR; x <= LATEST_YEAR; x++) {
-
-			PlayerTable pt = PlayerTable.populateTable(Paths.get("/Users/lukev/Documents/PlayerData/" + x + ".txt"), x);
-			seasons.add(pt);
-
-		}
-
-		JFrame frame = new JFrame();
-		frame.setTitle("NBA Player Comparison Engine");
+		frame = new JFrame();
+		frame.setTitle("NBA Comparison Finder");
 		frame.setSize(600, 500);
 		frame.setLayout(new BorderLayout());
 
@@ -57,13 +51,38 @@ public class ClosestPlayerFinder {
 		JLabel lastSeasonLabel = new JLabel("Last year of search range: ");
 		JTextField lastSeasonInput = new JTextField(4);
 
-		JButton findComp = new JButton("Find comparable player in search range");
+		JButton findComp = new JButton("Loading data, please wait...");
+		findComp.setEnabled(false);
 		findComp.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				// check inputs first
+				
+				boolean yearsOnlyDigits = true;
+				
+				for(int x = 0; x < seasonInput.getText().length(); x++) {
+					if(!Character.isDigit(seasonInput.getText().charAt(x))) {
+						yearsOnlyDigits = false;
+					}
+				}
+				
+				for(int x = 0; x < firstSeasonInput.getText().length(); x++) {
+					if(!Character.isDigit(firstSeasonInput.getText().charAt(x))) {
+						yearsOnlyDigits = false;
+					}
+				}
+				
+				for(int x = 0; x < firstSeasonInput.getText().length(); x++) {
+					if(!Character.isDigit(firstSeasonInput.getText().charAt(x))) {
+						yearsOnlyDigits = false;
+					}
+				}
+				
+				if(yearsOnlyDigits) {
 				findComp(playerInput.getText(), teamInput.getText(), Integer.parseInt(seasonInput.getText()),
 						Integer.parseInt(firstSeasonInput.getText()), Integer.parseInt(lastSeasonInput.getText()));
+				}else {
+					chosenPlayerStats.setText("Please ensure that all of your inputs are valid");
+				}
 			}
 
 		});
@@ -81,114 +100,83 @@ public class ClosestPlayerFinder {
 		northPanel.add(findComp);
 
 		JPanel westPanel = new JPanel();
-		westPanel.setBorder(BorderFactory.createEmptyBorder(15, 5, 10, 5));
-		JTextArea chosenPlayerStats = new JTextArea(20, 28);
+		westPanel.setBorder(BorderFactory.createEmptyBorder(15, 2, 10, 5));
+		chosenPlayerStats = new JTextArea(20, 28);
 		chosenPlayerStats.setEditable(false);
 		westPanel.add(chosenPlayerStats);
 
 		JPanel eastPanel = new JPanel();
-		eastPanel.setBorder(BorderFactory.createEmptyBorder(15, 5, 10, 5));
-		JTextArea compStats = new JTextArea(20, 28);
+		eastPanel.setBorder(BorderFactory.createEmptyBorder(15, 1, 10, 5));
+		compStats = new JTextArea(20, 28);
 		compStats.setEditable(false);
 		eastPanel.add(compStats);
 
 		frame.add(northPanel, BorderLayout.NORTH);
 		frame.add(westPanel, BorderLayout.WEST);
 		frame.add(eastPanel, BorderLayout.EAST);
+		
+		frame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				closeProgram();
+			}
+			
+		});
 
 		frame.setVisible(true);
+
+		// used to hold all the needed NBA seasons. Each PlayerTable contains the stats
+		// of every player that played
+		// during that season.
+		seasons = new Vector<PlayerTable>();
+
+		// Populate seasons with a PlayerTable for every season
+		for (int x = EARLIEST_YEAR; x <= LATEST_YEAR; x++) {
+
+			PlayerTable pt = PlayerTable.populateTable(Paths.get("./PlayerData/" + x + ".txt"), x);
+			seasons.add(pt);
+
+		}
+
+		findComp.setText("Find most comparable player in search range");
+		findComp.setEnabled(true);
+	}
+	
+	private void closeProgram() {
+		frame.dispose();
+		System.exit(0);
 	}
 
 	private void findComp(String name, String team, int season, int firstYear, int lastYear) {
 
 		// will be used to hold the user's chosen player
 		Player chosen = new Player();
+		int yearSpan = LATEST_YEAR - EARLIEST_YEAR;
+		boolean validPlayerAndSeasonEntered = false;
 
-	}
+		String playerAndTeam = name + " - " + team;
 
-	public static void main(String[] args) {
+		int yearIndex = yearSpan - (LATEST_YEAR - season);
 
-		while (true) {
-
-			// will hold a particular season for the selected player
-			int year = 0;
-
-			int yearSpan = LATEST_YEAR - EARLIEST_YEAR;
-
-			boolean validPlayerAndSeasonEntered = false;
-
-			// loop until the user gives a valid input
-			while (!validPlayerAndSeasonEntered) {
-
-				System.out.println(
-						"Enter the full name of the player you'd like to find a comparison for, followed by a dash and their team abbreviation (i.e \"Kawhi Leonard - TOR\")");
-				String nameAndTeam = s.nextLine();
-				System.out.println(
-						"Enter a particular season your chosen player played in while on your specified team (the second year of the season, i.e. \"2019\" for the 2018-19 season)");
-				year = Integer.parseInt(s.nextLine());
-
-				// finds the index of the chosen year in the Vector
-				int yearIndex = yearSpan - (LATEST_YEAR - year);
-
-				if (seasons.get(yearIndex).containsKey(nameAndTeam)) {
-					chosen = seasons.get(yearIndex).getPlayer(nameAndTeam);
-					validPlayerAndSeasonEntered = true;
-				} else {
-					System.out.println(
-							"Invalid input. You must enter a player and team in the appropriate format as well as a year in which they played on that team");
-				}
-
+		if (season <= LATEST_YEAR && season >= EARLIEST_YEAR) {
+			if (seasons.get(yearIndex).containsKey(playerAndTeam)) {
+				chosen = seasons.get(yearIndex).getPlayer(playerAndTeam);
+				validPlayerAndSeasonEntered = true;
 			}
+		}
 
-			boolean validYearEntered = false;
-			int firstYear = 0;
-			int lastYear = 0;
+		boolean validFirstYearEntered = false;
 
-			// loop until the user enters a valid year
-			while (!validYearEntered) {
+		if (firstYear >= EARLIEST_YEAR && firstYear <= LATEST_YEAR) {
+			validFirstYearEntered = true;
+		}
 
-				System.out.println(
-						"Enter the first year of the timespan in which you'd like to find a comparison (1980 - 2020):");
+		boolean validLastYearEntered = false;
 
-				firstYear = Integer.parseInt(s.nextLine());
+		if (firstYear >= EARLIEST_YEAR && firstYear <= LATEST_YEAR && lastYear >= firstYear) {
+			validLastYearEntered = true;
+		}
 
-				if (firstYear <= LATEST_YEAR && firstYear >= EARLIEST_YEAR) {
-					validYearEntered = true;
-				} else {
-					System.out.println("Invalid input. The first year must be within the range of the available data");
-				}
-
-			}
-
-			validYearEntered = false;
-
-			while (!validYearEntered) {
-
-				System.out.println(
-						"Enter the last year of the timespan in which you'd like to find a comparison (1980 - 2020):");
-
-				lastYear = Integer.parseInt(s.nextLine());
-
-				if (lastYear >= firstYear && lastYear <= LATEST_YEAR && lastYear >= EARLIEST_YEAR) {
-					validYearEntered = true;
-				} else {
-					System.out.println(
-							"Invalid input. The last year must be later than or equal to the first year and within the range of the available data");
-				}
-
-			}
-
-			System.out.println("Loading player stats...");
-
-			String name = chosen.getName();
-
-			System.out.println("Your Player:");
-			System.out.println(year + " season");
-			System.out.println(chosen.toString());
-			System.out.println("Most similar player in specified year range:");
-
-			// Gives comp and deviation initial values. By default, they are set to the
-			// first player in the first specified season.
+		if (validPlayerAndSeasonEntered && validFirstYearEntered && validLastYearEntered) {
 			Set<String> firstYearKeys = seasons.get(yearSpan - (LATEST_YEAR - firstYear)).getKeySet();
 			Vector<String> firstYearKeysVector = new Vector<String>();
 			for (String k : firstYearKeys) {
@@ -222,9 +210,14 @@ public class ClosestPlayerFinder {
 				}
 			}
 
-			System.out.println("Average statistical deviation: " + deviation);
-			System.out.println(compYear + " season");
-			System.out.println(comp.toString());
+			chosenPlayerStats.setText("Your Player:\n" + season + " season\n" + chosen.toString());
+			compStats.setText("Most comparable player:\n" + compYear + " season\n" + comp.toString());
+
+		} else {
+			chosenPlayerStats.setText(
+					"Invalid input. Ensure that you have entered valid inputs in every field. \n A season is denoted by the second"
+					+ " year in which it took place. \n Ensure that you have entered seasons between 1980 and 2020 to be included in the"
+					+ " search, \n and that your chosen player, team, and season are correct.");
 		}
 
 	}
