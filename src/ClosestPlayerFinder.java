@@ -204,7 +204,7 @@ public class ClosestPlayerFinder {
 
 		boolean validLastYearEntered = false;
 
-		if (firstYear >= EARLIEST_YEAR && firstYear <= LATEST_YEAR && lastYear >= firstYear) {
+		if (lastYear >= EARLIEST_YEAR && lastYear <= LATEST_YEAR && lastYear >= firstYear) {
 			validLastYearEntered = true;
 		}
 
