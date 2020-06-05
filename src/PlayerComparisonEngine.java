@@ -1,18 +1,12 @@
 
-//A GUI for running the comparison engine
+//A class for launching the comparison engine
 
 public class PlayerComparisonEngine {
-	
 
 	public static void main(String[] args) {
-		
+
 		ClosestPlayerFinder c = new ClosestPlayerFinder();
-		
+
 	}
-	
-	
-	
-	
-	
-	
+
 }
