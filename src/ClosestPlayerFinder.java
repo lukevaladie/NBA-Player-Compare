@@ -106,6 +106,8 @@ public class ClosestPlayerFinder {
 					findComp(playerInput.getText(), teamInput.getText(), Integer.parseInt(seasonInput.getText()),
 							Integer.parseInt(firstSeasonInput.getText()), Integer.parseInt(lastSeasonInput.getText()));
 				} else {
+					compStats.setText("");
+					deviationDisplay.setText("");
 					chosenPlayerStats.setText("Please ensure that all of your inputs are valid");
 				}
 			}
@@ -281,6 +283,8 @@ public class ClosestPlayerFinder {
 
 			// if any of the inputs are invalid, give an error message
 		} else {
+			compStats.setText("");
+			deviationDisplay.setText("");
 			chosenPlayerStats.setText(
 					"Invalid input. Ensure that you have entered \n valid inputs in every field. A season is \n denoted by the second"
 							+ " year in which it \n took place. Ensure that you have entered \n seasons between 1980 and 2020 to be included \n in the"
